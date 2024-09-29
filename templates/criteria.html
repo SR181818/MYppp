@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Criteria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Manage Criteria</h1>
+    <form action="{{ url_for('manage_criteria') }}" method="post">
+        <input type="text" name="name" placeholder="New Criteria" required>
+        <button type="submit">Add Criteria</button>
+    </form>
+
+    <h2>Existing Criteria</h2>
+    <ul>
+        {% for criterion in criteria %}
+            <li>{{ criterion.name }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

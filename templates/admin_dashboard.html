@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PDF Comparison Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">PDF Comparison Tool</a>
+            <ul class="navbar-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/admin">Admin Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin dashboard content -->
+    <div class="container">
+        <h1>Admin Dashboard: PDF Comparison Results</h1>
+        <div class="card">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>PDF Filename</th>
+                        <th>Matched Requirements</th>
+                        <th>Total Requirements</th>
+                        <th>Match Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.filename }}</td>
+                        <td>{{ result.matched }}</td>
+                        <td>{{ result.total }}</td>
+                        <td>{{ result.percentage }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
