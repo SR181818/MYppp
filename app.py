@@ -2,8 +2,21 @@ import os
 from flask import Flask, request, jsonify, render_template
 from werkzeug.utils import secure_filename  # Import secure_filename
 import fitz  # PyMuPDF for extracting text from PDF
+import json
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = './uploaded_docs'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+RESULTS_FILE = 'results.json'
+
+def load_results():
+    try:
+        with open('results.json', 'r') as file:
+            results = json.load(file)
+    except FileNotFoundError:
+        results = []  # Return empty list if file is not found
+    return results
 # Storage for comparison results
 comparison_results = []
 
@@ -56,6 +69,23 @@ def compare_pdfs(pdf1_path, pdf2_folder):
 
     return results
 
+# Function to load results from JSON file
+def load_results():
+    try:
+        with open(RESULTS_FILE, 'r') as file:
+            results = json.load(file)
+    except FileNotFoundError:
+        results = []
+    return results
+
+# Function to save results to JSON file
+def save_results(new_result):
+    results = load_results()
+    results.append(new_result)
+    with open(RESULTS_FILE, 'w') as file:
+        json.dump(results, file, indent=4)
+
+
 @app.route('/')
 def index():
     return render_template('index.html')  # Create an index.html file for your upload form.
@@ -84,12 +114,11 @@ def upload_pdf():
     else:
         return jsonify({"message": "Invalid file format. Only PDFs are allowed."}), 400
 
-# Admin Dashboard route
 @app.route('/admin')
 def admin_dashboard():
-    # Render the admin dashboard with stored results
-    return render_template('admin_dashboard.html', results=comparison_results)
-
+    # Load results from the JSON file
+    results = load_results()
+    return render_template('admin_dashboard.html', results=results)
 
 @app.route('/api/documents', methods=['GET'])
 def list_documents():
